@@ -4,12 +4,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.crisspian.roombd_class.databinding.FragmentSecondBinding;
+
 public class SecondFragment extends Fragment {
+
+    private FragmentSecondBinding binding;
 
     @Override
     public View onCreateView(
@@ -17,18 +22,35 @@ public class SecondFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_second, container, false);
+        binding = FragmentSecondBinding.inflate(inflater, container, false);
+
+        binding.secondFragmentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newTodo = binding.secondFragmentEt.getText().toString();
+                if (!newTodo.isEmpty()) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("newTodo", newTodo);
+                    NavHostFragment.findNavController(SecondFragment.this)
+                            .navigate(R.id.action_SecondFragment_to_FirstFragment, bundle);
+                } else {
+                    Toast.makeText(getContext(), "Debes escribir un todo", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+
+
+        return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.button_second).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(SecondFragment.this)
-                        .navigate(R.id.action_SecondFragment_to_FirstFragment);
-            }
-        });
+
+//                NavHostFragment.findNavController(SecondFragment.this)
+//                        .navigate(R.id.action_SecondFragment_to_FirstFragment);
+
     }
 }
